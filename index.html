@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="icon" href="heart.png">
+<link rel="apple-touch-icon" href="heart.png">
+
+<meta charset="UTF-8">
+<title>Un gift spécial</title>
+
+<!-- Google Font luxe minimaliste -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+
+<style>
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #fff0f5;
+  color: #8b1a2b;
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+}
+
+/* Titres élégants */
+h1, h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2em;
+  letter-spacing: 1px;
+  color: #8b1a2b;
+  text-shadow: 0 0 5px #ffc0cb33;
+  margin: 10px 0;
+}
+
+/* Écran mot de passe */
+#login {
+  position: fixed;
+  inset: 0;
+  background: #fff0f5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+input {
+  padding: 12px;
+  font-size: 1em;
+  border-radius: 12px;
+  border: 1px solid #ffb6c1;
+  background: transparent;
+  color: #8b1a2b;
+  margin: 10px;
+  text-align: center;
+}
+
+input::placeholder {
+  color: #d4a5b5;
+}
+
+button {
+  padding: 12px 18px;
+  border-radius: 30px;
+  border: 1px solid #ffb6c1;
+  background: transparent;
+  color: #8b1a2b;
+  cursor: pointer;
+  font-weight: bold;
+  letter-spacing: 1px;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #ffb6c1;
+  color: #fff0f5;
+  border-color: #ff69b4; 
+}
+
+#intro {
+  max-width: 650px;
+  margin: 20px auto;
+  font-size: 1.2em;
+  line-height: 1.8;
+  color: #8b1a2b;
+  min-height: 120px;
+}
+
+#continueBtn {
+  margin-top: 20px;
+  display: none;
+}
+
+#memoriesSection {
+  display: none;
+}
+
+/* Zone souvenirs */
+#memoryBox {
+  margin-top: 25px;
+  font-size: 1.2em;
+  color: #8b1a2b;
+}
+
+/* Zone souvenirs personnels */
+#personalMemory {
+  margin-top: 20px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  display: block;
+}
+
+#personalMemory h3 {
+  color: #ff69b4;
+}
+
+#personalMemory textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ffb6c1;
+  background: #fff5f7;
+  color: #8b1a2b;
+  font-family: 'Playfair Display', serif;
+  font-size: 1em;
+  resize: none;
+}
+
+#personalMemory button {
+  margin-top: 10px;
+  width: 100%;
+}
+
+#submittedMemories {
+  margin-top: 15px;
+  text-align: left;
+  color: #8b1a2b;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#submittedMemories li {
+  margin-bottom: 5px;
+  border-bottom: 1px solid #ffc0cb55;
+  padding-bottom: 5px;
+}
+
+/* Pluie de cœurs rose et doré */
+.heart {
+  position: fixed;
+  top: -10px;
+  font-size: 18px;
+  animation: fall linear infinite;
+  opacity: 0.6;
+}
+.heart.gold { color: #f268cd; }
+.heart.love { color: #ff69b4; }
+
+@keyframes fall {
+  to { transform: translateY(100vh); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Écran mot de passe -->
+<div id="login">
+  <h2>Bienvenue namouuur </h2>
+  <h2>Mot de passe stp</h2>
+  <input type="password" id="password" placeholder="Entre le mot de passe">
+  <button onclick="checkPassword()">C’est parti</button>
+</div>
+
+<!-- Contenu principal -->
+<div id="main">
+
+  <h1>Schatzi</h1>
+
+  <!-- Intro machine à écrire -->
+  <p id="intro"></p>
+  <button id="continueBtn" onclick="enterMemories()">Let’s goooo 💌</button>
+
+  <!-- Section souvenirs -->
+  <div id="memoriesSection">
+
+    <div>
+      <button onclick="showMemory(0)">Á mon prince charmant</button>
+      <button onclick="showMemory(1)">Première dédicace</button>
+      <button onclick="showMemory(2)">Deuxième dédicace</button>
+      <button onclick="showMemory(3)">Troisième dédicace</button>
+    </div>
+
+    <div id="memoryBox">Clique sur une option de ton choix</div>
+
+    <!-- Zone souvenirs personnels -->
+    <div id="personalMemory">
+      <h3>Laisse ton souvenir ici </h3>
+      <textarea id="memoryInput" rows="3" placeholder="Tout ce que tu veux ..."></textarea>
+      <button onclick="submitMemory()">Envoyer</button>
+      <ul id="submittedMemories"></ul>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+// 🔐 Mot de passe
+const secretPassword = "27";
+
+function checkPassword() {
+  const input = document.getElementById("password").value;
+  if (input === secretPassword) {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("main").style.display = "block";
+    startHearts();
+    startIntro();
+  } else {
+    alert("zut! mot de passe incorrect ");
+  }
+}
+
+// ✍️ Intro machine à écrire
+const introText = `Bienvenue mon chéri Coco. Ici ta codeuse.
+Si tu as réussi à ouvrir cette page, c´est que tu as passé la première étape de trouver le mot de passe.
+Maintenant je t’explique un peu ce qui t’attend.
+C´est juste un simple message dédicacé de plusieurs chansons pour te dire à quel point je t´aime fort. Certaines chansons que j’ai trouvé et aimé étaient destinées aux femmes.
+Je te les envoie telles quelles… mais sache que les paroles m’ont immédiatement fait penser à toi. Je t’aime mon Régis`;
+let i = 0;
+function startIntro() { typeWriter(); }
+
+function typeWriter() {
+  if (i < introText.length) {
+    document.getElementById("intro").innerHTML += introText.charAt(i);
+    i++;
+    setTimeout(typeWriter, 35);
+  } else {
+    document.getElementById("continueBtn").style.display = "inline-block";
+  }
+}
+
+function enterMemories() {
+  document.getElementById("intro").style.display = "none";
+  document.getElementById("continueBtn").style.display = "none";
+  document.getElementById("memoriesSection").style.display = "block";
+}
+
+const memories = [
+  {
+    text: "Juste que tu saches que c´est jusque pour la vie namour et qu´a deux on peut tJuste que tu saches que c'est jusqu'à la vie, namour, et qu'à deux on peut faire tellement de chosesellement ",
+    link: "https://youtu.be/h7SwTTe1aHk?si=1rijEtgViHS0FbOX"
+  },
+  {
+    text: "Tu m´as conquis babe",
+    link: "https://youtu.be/58jdlPxZSg0?si=9K1Nkkb2JfDCHZH1"
+  },
+  {
+    text: "Je t´aime",
+    link: "https://youtu.be/SWRRSwCbJsM?si=BOcR-Axx1-k6-VSL"
+  },
+  {
+    text: "You are perfect for me ",
+    link: "https://youtu.be/ff3nmZPCeHE?si=CoMKktIHqMi9T1RK"
+  }
+];
+
+function showMemory(i) {
+  const memoryBox = document.getElementById("memoryBox");
+  memoryBox.innerHTML = `${memories[i].text} <br>
+    <a href="${memories[i].link}" target="_blank">music</a>`;
+}
+
+// ✍️ Souvenirs personnels avec sauvegarde
+function submitMemory() {
+  const input = document.getElementById("memoryInput");
+  const text = input.value.trim();
+  if (text !== "") {
+    addMemoryToDOM(text);
+    saveMemory(text);
+    input.value = "";
+  }
+}
+
+function addMemoryToDOM(text) {
+  const ul = document.getElementById("submittedMemories");
+  const li = document.createElement("li");
+  li.textContent = text;
+
+  const delBtn = document.createElement("button");
+  delBtn.textContent = "Supprimer";
+  delBtn.style.marginLeft = "10px";
+  delBtn.onclick = () => {
+    ul.removeChild(li);
+    removeMemory(text);
+  };
+
+  li.appendChild(delBtn);
+  ul.appendChild(li);
+}
+
+function saveMemory(text) {
+  let saved = JSON.parse(localStorage.getItem("memories")) || [];
+  saved.push(text);
+  localStorage.setItem("memories", JSON.stringify(saved));
+}
+
+function removeMemory(text) {
+  let saved = JSON.parse(localStorage.getItem("memories")) || [];
+  saved = saved.filter(msg => msg !== text);
+  localStorage.setItem("memories", JSON.stringify(saved));
+}
+
+// Recharge les souvenirs au chargement
+window.onload = function() {
+  let saved = JSON.parse(localStorage.getItem("memories")) || [];
+  saved.forEach(msg => addMemoryToDOM(msg));
+}
+
+function startHearts() {
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart " + (Math.random() > 0.5 ? "gold" : "love");
+    heart.innerText = "❤";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (Math.random()*3 + 2) + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 5000);
+  }, 300);
+}
+</script>
+
+</body>
+</html>
